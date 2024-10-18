@@ -1,0 +1,28 @@
+{
+  "name": "fixDynamicEQ",
+  "productName": "fixDynamicEQ",
+  "version": "0.1.0",
+  "description": "Update D&M AVRs DEQ volumes based on main volume",
+  "keywords": [
+    "Nexus",
+    "A1Evo",
+    "Auddysey"
+  ],
+  "main": "fixDynamicEQ.js",
+  "bin": "./fixDynamicEQ.js",
+  "author": "OCA",
+  "scripts": {
+    "start": "node ./fixDynamicEQ.js"
+  },
+  "pkg" : {   
+     "scripts" : [
+      ],
+     "assets" : [
+       "./node_modules/*"
+     ] 
+   },
+  "dependencies": {
+    "telnet-client": "^2.2.0",
+    "node-ssdp": "^4.0.0"
+  }
+}
