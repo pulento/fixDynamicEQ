@@ -8,6 +8,7 @@ Please visit [OCA's YouTube video](https://www.youtube.com/watch?v=tNj-nWR-Yyo) 
 
 <ul>
   <li>You can force AVR IP using -f AVRIP</li>
+  <li>For example ./fixDynamicEQ -f 192.168.0.155</li>
 </ul>
 
 # Install
@@ -56,5 +57,5 @@ This is work in progress provided as is. Also is a port of OCA's work please don
 **MacOS packages aren't signed, MacOS probably will say it is damaged and should be deleted. Run the following from your terminal:**
 
 ```
-xattr -c /Applications/A1Evo_Electrified.app
+xattr -c ./fixDynamicEQ
 ```
