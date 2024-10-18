@@ -55,5 +55,9 @@ A1 Evo Nexus is discussed and released in the following [AVS Forum thread](https
 **MacOS packages aren't signed, MacOS probably will say it is damaged and should be deleted. Run the following from your terminal:**
 
 ```
+chmod +x fixDynamicEQ
+```
+
+```
 xattr -c ./fixDynamicEQ
 ```
