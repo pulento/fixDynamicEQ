@@ -72,7 +72,7 @@ pkg . -t "node*-linux-x64"
 fixDynamicEQ sometimes exits when changes occurs on the network side of the hosting machine. To overcome this you can use a process
 manager like [PM2](https://pm2.keymetrics.io/) to restart it in those cases.
 
-If you don't have npm installed you can install it through [Homebrew](brew.sh) on MacOS or download NodeJS for Windows directly from its [site](https://nodejs.org/en/download/package-manager).
+If you don't have npm installed you can install it through [Homebrew](https://brew.sh) on MacOS or download NodeJS for Windows directly from its [site](https://nodejs.org/en/download/package-manager).
 
 Then having npm in place you can install PM2:
 
