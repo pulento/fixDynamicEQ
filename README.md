@@ -106,6 +106,12 @@ pm2 logs
 pm2 monit
 `````
 
+A PM2 config file is included to ease execution especially on Windows where argument pass is a pain, edit it to suit your needs, check args variable if you need to remove it or change the IP of your AVR, then start with following command:
+
+````
+pm2 start deq_pm2.config.js
+````
+
 # Official A1 Evo Nexus forum thread
 
 A1 Evo Nexus is discussed and released in the following [AVS Forum thread](https://www.avsforum.com/threads/nexus-next-gen-room-eq-by-oca.3309475).
