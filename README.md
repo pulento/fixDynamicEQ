@@ -1,6 +1,6 @@
 # fixDynamicEQ for Mac
 
-Simple packaging of OCA's fixDynamicEQ for MacOS
+Simple packaging of OCA's fixDynamicEQ for MacOS, Windows and Linux
 
 Please visit [OCA's YouTube video](https://www.youtube.com/watch?v=tNj-nWR-Yyo) that introduce A1 Evo Nexus
 
@@ -42,6 +42,7 @@ Package:
 ```
 npm install -g pkg
 ````
+
 For ARM64 Mac:
 
 ```
@@ -52,6 +53,18 @@ For x64 Mac:
 
 ```
 pkg . -t "node*-macos-x64"
+````
+
+For x64 Windows:
+
+```
+pkg . -t "node*-win-x64"
+````
+
+For x64 Linux:
+
+```
+pkg . -t "node*-linux-x64"
 ````
 
 # Official A1 Evo Nexus forum thread
