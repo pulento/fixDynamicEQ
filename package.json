@@ -19,7 +19,8 @@
       ],
      "assets" : [
        "./node_modules/*"
-     ] 
+     ],
+     "outputPath" : "out"
    },
   "dependencies": {
     "telnet-client": "^2.2.0",
