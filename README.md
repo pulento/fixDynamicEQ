@@ -1,4 +1,4 @@
-# fixDynamicEQ for Mac
+# fixDynamicEQ for Mac, Windows and Linux
 
 Simple packaging of OCA's fixDynamicEQ for MacOS, Windows and Linux
 
