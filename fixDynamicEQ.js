@@ -8,7 +8,7 @@ const os = require('os');
 require('events').EventEmitter.defaultMaxListeners = 20;
 const client = new Client();
 const networkInterfaces = os.networkInterfaces();
-let foundAVR = false, foundDM = false, deviceIP = '', localIPs = [], jsonData, silentMode = true; // Change to 'false' to get full on screen prompting //
+let foundAVR = false, deviceIP = '', localIPs = [], notDM_AVRIPs = [], jsonData, silentMode = true; // Change to 'false' to get full on screen prompting //
 let model = "", upnpLocation;
 Object.keys(networkInterfaces).forEach((interfaceName) => {
     networkInterfaces[interfaceName].forEach((networkInterface) => {
@@ -241,6 +241,8 @@ const connectToAVR = async (avIP) => {
                 if (model === jsonData.targetModelName) {
                     console.log("Matching AVR model found!");
                     break;
+                } else {
+                    notDM_AVRIPs.push(denonIP);
                 }
             }
         }
@@ -251,7 +253,7 @@ const connectToAVR = async (avIP) => {
 
 client.on('response', (headers, statusCode, rinfo) => {
     deviceIP = rinfo.address;
-    if (localIPs.includes(deviceIP) || commonRouterIPs.includes(deviceIP) /*|| foundAVR*/) {
+    if (localIPs.includes(deviceIP) || commonRouterIPs.includes(deviceIP) || notDM_AVRIPs.includes(deviceIP) /*|| foundAVR*/) {
         return;
     }
     const isDenonOrMarantz = (
@@ -263,14 +265,18 @@ client.on('response', (headers, statusCode, rinfo) => {
         (headers.ST && headers.ST.toLowerCase().includes('marantz'))
     );
     if (isDenonOrMarantz) { 
-        //console.log(`AV Receiver found at: ${deviceIP}`);
+        //console.log(`Potential AV Receiver found at: ${deviceIP}`);
         denonIP = rinfo.address;
         upnpLocation = headers.LOCATION;
         foundAVR = true;
-}});
+    } else {
+        notDM_AVRIPs.push(deviceIP);
+        //console.log(notDM_AVRIPs);
+    }
+});
 
 const searchForAVR = () => {
-    const ssdpTimeOut = 1000;
+    const ssdpTimeOut = 5000;
     console.log(`Searching for: ${jsonData.targetModelName}...`);
     return new Promise((resolve) => {
         client.search('ssdp:all');
