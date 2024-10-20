@@ -16,8 +16,7 @@ Object.keys(networkInterfaces).forEach((interfaceName) => {
             localIPs.push(networkInterface.address);
         }
 });});
-const commonRouterIPs = ['192.168.1.1','192.168.0.1','192.168.1.254','10.0.0.138','192.168.2.1','192.168.254.254','192.168.3.1','10.0.1.1','192.168.11.1',
-    '10.0.0.2','10.1.1.1','192.168.15.1','192.168.8.1','192.168.123.254','192.168.10.1','192.168.30.1','192.168.100.1','192.168.20.1','192.168.16.1'];
+
 const loadJSONData = async () => {
     const exeDir = process.pkg ? path.dirname(process.execPath) : path.dirname(process.argv[1]);
     try {
@@ -253,7 +252,7 @@ const connectToAVR = async (avIP) => {
 
 client.on('response', (headers, statusCode, rinfo) => {
     deviceIP = rinfo.address;
-    if (localIPs.includes(deviceIP) || commonRouterIPs.includes(deviceIP) || notDM_AVRIPs.includes(deviceIP) /*|| foundAVR*/) {
+    if (localIPs.includes(deviceIP) || notDM_AVRIPs.includes(deviceIP)) {
         return;
     }
     const isDenonOrMarantz = (
@@ -271,7 +270,7 @@ client.on('response', (headers, statusCode, rinfo) => {
         foundAVR = true;
     } else {
         notDM_AVRIPs.push(deviceIP);
-        //console.log(notDM_AVRIPs);
+        console.log(notDM_AVRIPs);
     }
 });
 
