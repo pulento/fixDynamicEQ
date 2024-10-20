@@ -1,7 +1,7 @@
 {
   "name": "fixDynamicEQ",
   "productName": "fixDynamicEQ",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Update D&M AVRs DEQ volumes based on main volume",
   "keywords": [
     "Nexus",
