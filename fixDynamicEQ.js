@@ -270,7 +270,7 @@ client.on('response', (headers, statusCode, rinfo) => {
         foundAVR = true;
     } else {
         notDM_AVRIPs.push(deviceIP);
-        console.log(notDM_AVRIPs);
+        //console.log(notDM_AVRIPs);
     }
 });
 
