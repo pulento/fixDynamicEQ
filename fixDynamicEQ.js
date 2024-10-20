@@ -184,7 +184,7 @@ const connectToAVR = async (avIP) => {
                         }
                         let formattedLevel = newLevel % 1 === 0 ? newLevel.toFixed(0) : (newLevel * 10).toFixed(0);
                         await connection.send(`SSLEV${speaker} ${formattedLevel}\x0D`)
-                            .catch(err => console.error(`SSLEV${speaker} command error:`, err));
+                            .catch(err => console.error(`SSLEV${speaker} command error. Please check your AVR is ON!`));
                     }
                 })
             );
