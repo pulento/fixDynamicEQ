@@ -37,34 +37,14 @@ Run:
 npm start
 ```
 
-Package:
+# Package for all supported OS/architectures:
 
 ```
 npm install -g pkg
 ````
 
-For ARM64 Mac:
-
 ```
-pkg . -t "node*-macos-arm64"
-````
-
-For x64 Mac:
-
-```
-pkg . -t "node*-macos-x64"
-````
-
-For x64 Windows:
-
-```
-pkg . -t "node*-win-x64"
-````
-
-For x64 Linux:
-
-```
-pkg . -t "node*-linux-x64"
+pkg .
 ````
 
 # Run with a Process Manager
