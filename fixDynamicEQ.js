@@ -105,7 +105,14 @@ const connectToAVR = async (avIP) => {
                 return;
             }
             log('Reading AVR volume...');
-            let mvResponse = await connection.send('MV?\x0D').catch(err => console.error('Error reading volume:', err));
+            let mvResponse;
+            try {
+                mvResponse = await connection.send('MV?\x0D');
+            } catch(error) {
+                console.error('Retrying read');
+                mvResponse = await connection.send('MV?\x0D').catch(err => console.error('Error reading volume:',err));
+            }
+            //let mvResponse = await connection.send('MV?\x0D').catch(err => console.error('Error reading volume:', err));
             const mvMatch = mvResponse && mvResponse.match(/MV(\d+)/);
             const mvMaxMatch = mvResponse.match(/MVMAX (\d+)/);
             if (mvMatch) {
