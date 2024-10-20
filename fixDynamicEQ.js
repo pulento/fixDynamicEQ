@@ -8,7 +8,8 @@ const os = require('os');
 require('events').EventEmitter.defaultMaxListeners = 20;
 const client = new Client();
 const networkInterfaces = os.networkInterfaces();
-let foundAVR = false, deviceIP = '', localIPs = [], jsonData, silentMode = true; // Change to 'false' to get full on screen prompting //
+let foundAVR = false, foundDM = false, deviceIP = '', localIPs = [], jsonData, silentMode = true; // Change to 'false' to get full on screen prompting //
+let model = "", upnpLocation;
 Object.keys(networkInterfaces).forEach((interfaceName) => {
     networkInterfaces[interfaceName].forEach((networkInterface) => {
         if (!networkInterface.internal && networkInterface.family === 'IPv4') {
@@ -18,7 +19,7 @@ Object.keys(networkInterfaces).forEach((interfaceName) => {
 const commonRouterIPs = ['192.168.1.1','192.168.0.1','192.168.1.254','10.0.0.138','192.168.2.1','192.168.254.254','192.168.3.1','10.0.1.1','192.168.11.1',
     '10.0.0.2','10.1.1.1','192.168.15.1','192.168.8.1','192.168.123.254','192.168.10.1','192.168.30.1','192.168.100.1','192.168.20.1','192.168.16.1'];
 const loadJSONData = async () => {
-const exeDir = process.pkg ? path.dirname(process.execPath) : path.dirname(process.argv[1]);
+    const exeDir = process.pkg ? path.dirname(process.execPath) : path.dirname(process.argv[1]);
     try {
         const files = await fs.promises.readdir(exeDir);
         const jsonFile = files.find(file => file.startsWith('manualREW') && file.endsWith('.ady'));
@@ -211,25 +212,39 @@ const connectToAVR = async (avIP) => {
         console.error('Telnet connection attempt:', err.message);
     }
 };
+
 (async () => {
     await loadJSONData();
     if (!jsonData) {
         console.error("JSON data could not be loaded. Exiting process.");
         return;
     }
-    console.log(process.argv);
+    //console.log(process.argv);
     if (process.argv[3] && process.argv[2] === '-f') {
-        console.log(`Forcing AVR IP to: ${process.argv[3]}`);
         deviceIP = process.argv[3];
+        console.log(`Forcing AVR IP to: ${deviceIP}`);
         foundAVR = true;
         connectToAVR(deviceIP);
     } else {
-        await searchForAVR();
+        while(true) {
+            await searchForAVR();
+            if (foundAVR) {
+                model = await getModel(upnpLocation);
+                console.log(`AVR Model found: ${model}`);
+                if (model === jsonData.targetModelName) {
+                    console.log("Matching AVR model found!");
+                    break;
+                }
+            }
+        }
+        console.log(`Connecting to: ${denonIP}`);
+        connectToAVR(denonIP);
     }
 })();
+
 client.on('response', (headers, statusCode, rinfo) => {
     deviceIP = rinfo.address;
-    if (localIPs.includes(deviceIP) || commonRouterIPs.includes(deviceIP) || foundAVR) {
+    if (localIPs.includes(deviceIP) || commonRouterIPs.includes(deviceIP) /*|| foundAVR*/) {
         return;
     }
     const isDenonOrMarantz = (
@@ -240,23 +255,56 @@ client.on('response', (headers, statusCode, rinfo) => {
         (headers.ST && headers.ST.toLowerCase().includes('denon')) ||
         (headers.ST && headers.ST.toLowerCase().includes('marantz'))
     );
-    if (isDenonOrMarantz) {
-        console.log(`AV Receiver found at: ${deviceIP}`);
+    if (isDenonOrMarantz) { 
+        //console.log(`AV Receiver found at: ${deviceIP}`);
+        denonIP = rinfo.address;
+        upnpLocation = headers.LOCATION;
         foundAVR = true;
-        connectToAVR(deviceIP);
 }});
+
 const searchForAVR = () => {
-    const ssdpTimeOut = 10000;
-    console.log("Searching AVR...");
+    const ssdpTimeOut = 1000;
+    console.log(`Searching for: ${jsonData.targetModelName}...`);
     return new Promise((resolve) => {
         client.search('ssdp:all');
+        //client.search('urn:schemas-denon-com:device:AiosDevice:1');
+        //client.search('urn:schemas-denon-com:service:ACT:1');
         setTimeout(() => {
             client.stop();
             resolve();
         }, ssdpTimeOut);
-})};
+    })
+};
+
+async function getModel(url) {
+    return await fetch(url)
+    .then(response => {
+        return response.text();
+    })
+    .then(responseText => {
+        lines = responseText.split(/\r?\n/);
+        let i = 0;
+        modelName = '';
+        while (line = lines[i++]) {
+            if (line.includes("modelName")) {
+                modelName = line.split("<modelName>")[1].split("</modelName>")[0];
+                break;
+            }
+        }
+        return modelName;
+    })
+    .catch(error => {
+        console.error(`Error getting ${url}: ` + error)
+    });
+}
+
 function log(message) {
     if (!silentMode) {
         console.log(message);
 }};
+
+function delay(time) {
+    return new Promise(resolve => setTimeout(resolve, time));
+}
+
 setTimeout(() => {client.stop();}, 500);
