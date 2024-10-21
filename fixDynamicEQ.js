@@ -160,6 +160,9 @@ const connectToAVR = async (avIP) => {
             let changesApplied = false;
             await Promise.all(
                 Object.keys(initialSpeakerLevels).map(async (speaker) => {
+                    if (!halfChangeSpeakers.includes(speaker) && !quarterChangeSpeakers.includes(speaker)) {
+                        return;
+                    }
                     let initialLevel = initialSpeakerLevels[speaker];
                     let newLevel;
                     let adjustment;
