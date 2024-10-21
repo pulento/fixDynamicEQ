@@ -233,8 +233,12 @@ const connectToAVR = async (avIP) => {
         return;
     }
     //console.log(process.argv);
-    if (process.argv[3] && process.argv[2] === '-f') {
-        deviceIP = process.argv[3];
+    if ((process.argv[3] && process.argv[2] === '-f') || process.env.FIXED_IP) {
+        if (process.env.FIXED_IP) {
+            deviceIP = process.env.FIXED_IP
+        } else {
+            deviceIP = process.argv[3];
+        }
         console.log(`Forcing AVR IP to: ${deviceIP}`);
         foundAVR = true;
         connectToAVR(deviceIP);
