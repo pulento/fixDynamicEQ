@@ -2,21 +2,21 @@
 # User --net=host since we need multicast
 FROM node:18-alpine
 
+ENV ADY_DIRECTORY=/usr/src/app/rew/
+
 # Create app directory
 WORKDIR /usr/src/app
 
-# Install Git
+# Install utility packages
 RUN apk update && apk upgrade && \
-    apk add --no-cache bash git openssh
+    apk add --no-cache bash openssh
 
 # Install app dependencies
 # A wildcard is used to ensure both package.json AND package-lock.json are copied
 # where available (npm@5+)
-COPY manualREW* ./
 
 # Copy App
 COPY . .
-RUN ls -la
 
 # Start
 RUN npm install

@@ -18,8 +18,12 @@ Object.keys(networkInterfaces).forEach((interfaceName) => {
 });});
 
 const loadJSONData = async () => {
-    const exeDir = process.pkg ? path.dirname(process.execPath) : path.dirname(process.argv[1]);
+    let exeDir = process.pkg ? path.dirname(process.execPath) : path.dirname(process.argv[1]);
     try {
+        if (process.env.ADY_DIRECTORY) {
+            exeDir = process.env.ADY_DIRECTORY;
+        }
+        console.log(`Searching calibration file at: ${exeDir}`);
         const files = await fs.promises.readdir(exeDir);
         const jsonFile = files.find(file => file.startsWith('manualREW') && file.endsWith('.ady'));
         if (!jsonFile) {
