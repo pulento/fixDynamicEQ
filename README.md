@@ -41,11 +41,21 @@ npm start
 
 ```
 npm install -g pkg
-````
+```
 
 ```
 pkg .
-````
+```
+
+# Docker Image
+
+A Docker Image is available at Docker Hub, you can run it with the following command.
+
+```
+docker run -d -it --mount type=bind,source="$(pwd)"/REW,target=/usr/src/app/rew pulento/fixdynamiceq:latest
+```
+
+Please note the source parameter which is the folder where your .ady calibration file resides. In this example '$(pwd)/REW' which is basically a REW folder in your current directory, you can point that to whatever folder your manualREW-something.ady is stored on your local machine. 
 
 # Run with a Process Manager
 
